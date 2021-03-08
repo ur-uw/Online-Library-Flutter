@@ -45,6 +45,20 @@ class BooksUsersController extends GetxController {
     }
   }
 
+  //Search about a book using search delegate
+  //TODO: Make search on all books using the api
+  List<Book> searchBooks(String searchTerm) {
+    print(searchTerm);
+    List<Book> searchResultList = _allBooks.value
+        .where(
+          (book) =>
+              book.bookName.toLowerCase().contains(searchTerm.toLowerCase()) ||
+              book.author.toLowerCase().contains(searchTerm.toLowerCase()),
+        )
+        .toList();
+    return searchResultList;
+  }
+
   @override
   void onReady() async {
     try {

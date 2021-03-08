@@ -70,10 +70,15 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Color(0xffFFFAFA),
         appBar: AppBar(
           title: text('Books'),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.search),
+                onPressed: () => showSearch(context: context, delegate: BookSearch(_booksUsersController)))
+          ],
         ),
         drawer: Obx(
           () => _authController.currentUser != null
-              ? appDrawer()
+              ? appDrawer(_authController.currentUser.profileImage, _authController.currentUser.name)
               //TODO: delete this widget after debugging
               : Container(
                   child: Center(

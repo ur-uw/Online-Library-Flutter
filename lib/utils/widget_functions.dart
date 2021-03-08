@@ -1,10 +1,8 @@
-import 'package:auth_laravel/controllers/authController.dart';
 import 'package:auth_laravel/services/AuthService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
-
 import 'constants.dart';
 
 Size screenSize(BuildContext context) {
@@ -170,8 +168,7 @@ bool checkIfTheKeyboardIsOn(BuildContext context) {
   return false;
 }
 
-Drawer appDrawer() {
-  final AuthController controller = Get.find();
+Drawer appDrawer(String profileImage, String name) {
   return Drawer(
     elevation: 0,
     child: Container(
@@ -185,13 +182,19 @@ Drawer appDrawer() {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CircleAvatar(
-                  radius: 45,
-                  backgroundColor: white,
-                  backgroundImage: NetworkImage(controller.currentUser.profileImage),
+                Expanded(
+                  flex: 5,
+                  child: Container(
+                    height: 70,
+                    width: 70,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(image: NetworkImage(profileImage), fit: BoxFit.contain),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 10),
-                text(controller.currentUser.name, style: defaultTextStyle, textAlign: TextAlign.center)
+                Expanded(child: text(name, style: defaultTextStyle, textAlign: TextAlign.center))
               ],
             ),
           ),
@@ -210,10 +213,29 @@ Drawer appDrawer() {
                 ),
                 Card(
                   child: ListTile(
+                    leading: Icon(
+                      Icons.favorite,
+                      color: black,
+                    ),
+                    title: text('Favorites'),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.settings,
+                      color: black,
+                    ),
+                    title: text('Settings'),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
                     onTap: () async {
                       try {
+                        String token = await FlutterSecureStorage().read(key: 'token');
                         await FlutterSecureStorage().deleteAll();
-                        await AuthService().logOut(controller.getToken);
+                        await AuthService().logOut(token);
                         Get.offAllNamed('/');
                       } catch (e) {
                         print(e.toString());
