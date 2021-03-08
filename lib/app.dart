@@ -12,7 +12,13 @@ class App extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       getPages: AppRoutes.routes,
-      theme: ThemeData(scaffoldBackgroundColor: black, accentColor: white),
+      theme: ThemeData(
+        scaffoldBackgroundColor: black,
+        accentColor: white,
+        appBarTheme: AppBarTheme(
+          backgroundColor: black,
+        ),
+      ),
       initialRoute: isLoggedIn ? '/home' : '/',
     );
   }

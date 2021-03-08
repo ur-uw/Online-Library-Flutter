@@ -1,5 +1,8 @@
+import 'package:auth_laravel/controllers/authController.dart';
+import 'package:auth_laravel/services/AuthService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 
 import 'constants.dart';
@@ -165,4 +168,69 @@ Container buildFormField({
 bool checkIfTheKeyboardIsOn(BuildContext context) {
   if (MediaQuery.of(context).viewInsets.bottom != 0) return true;
   return false;
+}
+
+Drawer appDrawer() {
+  final AuthController controller = Get.find();
+  return Drawer(
+    elevation: 0,
+    child: Container(
+      color: black,
+      padding: EdgeInsets.all(10),
+      child: ListView(
+        children: [
+          Container(
+            height: Get.height / 4.5,
+            padding: EdgeInsets.only(top: 10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                CircleAvatar(
+                  radius: 45,
+                  backgroundColor: white,
+                  backgroundImage: NetworkImage(controller.currentUser.profileImage),
+                ),
+                SizedBox(height: 10),
+                text(controller.currentUser.name, style: defaultTextStyle, textAlign: TextAlign.center)
+              ],
+            ),
+          ),
+          Container(
+            padding: EdgeInsets.only(top: Get.height / 10),
+            child: Column(
+              children: [
+                Card(
+                  child: ListTile(
+                    leading: Icon(
+                      Icons.menu_book_sharp,
+                      color: black,
+                    ),
+                    title: text('My books'),
+                  ),
+                ),
+                Card(
+                  child: ListTile(
+                    onTap: () async {
+                      try {
+                        await FlutterSecureStorage().deleteAll();
+                        await AuthService().logOut(controller.getToken);
+                        Get.offAllNamed('/');
+                      } catch (e) {
+                        print(e.toString());
+                      }
+                    },
+                    leading: Icon(
+                      Icons.logout,
+                      color: black,
+                    ),
+                    title: text('Logout'),
+                  ),
+                )
+              ],
+            ),
+          )
+        ],
+      ),
+    ),
+  );
 }

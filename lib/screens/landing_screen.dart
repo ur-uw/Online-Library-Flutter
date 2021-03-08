@@ -54,7 +54,7 @@ class LandingScreen extends StatelessWidget {
                         "Welcome to the Online Library. A service "
                         "dedicated to knowledgeable people of the world. This is one of the largest and most "
                         "authoritative collections of online journals, books, and research resources,covering  "
-                        "lifef, health, social and physical sciences.",
+                        "lief, health, social and physical sciences.",
                         textAlign: TextAlign.center,
                         style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.normal, color: black),
                       ),
@@ -68,7 +68,7 @@ class LandingScreen extends StatelessWidget {
                         color: black,
                         child: text('Sign Up',
                             style: GoogleFonts.poppins(fontSize: 18, fontWeight: FontWeight.normal, color: white)),
-                        onPressed: () => Get.toNamed('/signUp'),
+                        onPressed: () => Get.toNamed('/register'),
                       ),
                     ),
                     SizedBox(

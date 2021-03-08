@@ -11,7 +11,7 @@ class AuthController extends GetxController {
   Rx<User> _currentUser = Rx<User>();
   bool _isLoggedIn = false;
   bool get isLoggedIn => _isLoggedIn;
-  User get currentUsr => _currentUser.value;
+  User get currentUser => _currentUser.value;
   String _token;
   String get getToken => _token;
 

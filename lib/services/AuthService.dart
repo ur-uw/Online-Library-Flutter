@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:auth_laravel/models/user_model.dart';
 import 'package:get/get.dart';
 
@@ -24,7 +25,11 @@ class AuthService extends GetConnect {
         "email": email,
         "password": password,
       };
-      httpClient.baseUrl = 'http://10.0.2.2:8000/api';
+      if (Platform.isAndroid) {
+        httpClient.baseUrl = 'http://10.0.2.2:8000/api';
+      } else {
+        httpClient.baseUrl = 'http://localhost:8000/api';
+      }
       Response response = await post('/register', data);
       return response.body;
     } catch (e) {
@@ -34,20 +39,33 @@ class AuthService extends GetConnect {
   }
 
   Future<User> getUserByToken(String token) async {
-    httpClient.baseUrl = 'http://10.0.2.2:8000/api';
+    if (Platform.isAndroid) {
+      httpClient.baseUrl = 'http://10.0.2.2:8000/api';
+    } else {
+      httpClient.baseUrl = 'http://localhost:8000/api';
+    }
     Response response = await get(
       '/user',
       headers: {
         'Authorization': 'Bearer $token',
+        'Accept': 'application/json',
       },
       contentType: 'application/json',
     );
-    User user = User.fromJson(response.body);
-    return user;
+    if (response.statusCode != 401) {
+      User user = User.fromJson(response.body);
+      return user;
+    } else {
+      return null;
+    }
   }
 
   Future<void> logOut(String token) async {
-    httpClient.baseUrl = 'http://10.0.2.2:8000/api';
+    if (Platform.isAndroid) {
+      httpClient.baseUrl = 'http://10.0.2.2:8000/api';
+    } else {
+      httpClient.baseUrl = 'http://localhost:8000/api';
+    }
     Response response = await get(
       '/logout',
       headers: {
